@@ -1,7 +1,7 @@
 @extends('welcome')
 @section('title', 'Books')
 @section('content')
-    <a href="/book_create">Add a book</a>
+    <a href="/book/create">Add a book</a>
     <table>
         <thead>
         <tr>
@@ -9,6 +9,7 @@
             <td>Title</td>
             <td>Description</td>
             <td>Publish year</td>
+            <td style="color: red">Buttons</td>
         </tr>
         </thead>
         <tbody>
@@ -20,6 +21,7 @@
                 <td>{{$book->title}}</td>
                 <td>{{$book->description}}</td>
                 <td>{{$book->publish_year}}</td>
+                <td><a href="/book/{{$book->id}}/edit"></a></td>
             </tr>
         @empty
             <tr>

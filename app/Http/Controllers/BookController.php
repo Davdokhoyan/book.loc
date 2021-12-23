@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Type;
+use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
@@ -16,7 +17,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        dd('hello');
+        $books = Book::all();
+        return response()->view('book.index', compact('books'));
     }
 
     /**
@@ -28,20 +30,26 @@ class BookController extends Controller
     {
 
         $types = Type::all();
-//        dd($types);
         return response()
             ->view('book.create', compact('types'));
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreBookRequest  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store(StoreBookRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:50|min:1',
+            'poster' => 'bail|sometimes|nullable|file|mimes:jpg,jpeg,png|lte:512',
+            'publish_year' => 'required|integer',
+            'description' => 'required|min:10',
+            'types' => 'array|required',
+            // 'user_email' => 'email|required|unique:users,email'
+        ]);
+        Book::create($request->all());
+        return redirect('/book');
     }
 
     /**
@@ -61,9 +69,10 @@ class BookController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(Book $book)
+    public function edit($id)
     {
-        //
+        $book = Book::findOrFail($id);
+        return view('book.edit', compact('book'));
     }
 
     /**
@@ -72,10 +81,19 @@ class BookController extends Controller
      * @param  \App\Http\Requests\UpdateBookRequest  $request
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(UpdateBookRequest $request, Book $book)
+    public function update(Request $request, $book)
     {
-        //
+        $book = Book::find($book);
+        $book->title =  $request->get('title');
+        $book->poster = $request->get('poster');
+        $book->publish_year = $request->get('publish_year');
+        $book->description = $request->get('description');
+        $book->types = $request->get('types');
+        $book->save();
+
+        return redirect('/book')->with('success', 'Book updated.');
     }
 
     /**
