@@ -46,7 +46,7 @@ class BookController extends Controller
             'publish_year' => 'required|integer',
             'description' => 'required|min:10',
             'types' => 'array|required',
-            // 'user_email' => 'email|required|unique:users,email'
+           // 'user_email' => 'email|required|unique:users,email'
         ]);
         Book::create($request->all());
         return redirect('/book');
@@ -81,19 +81,10 @@ class BookController extends Controller
      * @param  \App\Http\Requests\UpdateBookRequest  $request
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Request $request, $book)
+    public function update(UpdateBookRequest $request, Book $book)
     {
-        $book = Book::find($book);
-        $book->title =  $request->get('title');
-        $book->poster = $request->get('poster');
-        $book->publish_year = $request->get('publish_year');
-        $book->description = $request->get('description');
-        $book->types = $request->get('types');
-        $book->save();
-
-        return redirect('/book')->with('success', 'Book updated.');
+        //
     }
 
     /**

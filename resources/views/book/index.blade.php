@@ -9,7 +9,7 @@
             <td>Title</td>
             <td>Description</td>
             <td>Publish year</td>
-            <td style="color: red">Buttons</td>
+            <td>Buttons</td>
         </tr>
         </thead>
         <tbody>

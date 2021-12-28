@@ -37,6 +37,12 @@
             @endif
 
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+                @section('content')
+                    <p>
+{{--                        {{__('main.login', ['name' => 'jasmine'])}}--}}
+                        {{trans_choice('main.book', 101)}}
+                    </p>
+                @endsection
                 @yield('content')
             </div>
         </div>

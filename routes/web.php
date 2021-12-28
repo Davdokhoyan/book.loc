@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialProviderController;
-
+use \Illuminate\Support\Facades\App;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,18 +15,19 @@ use App\Http\Controllers\SocialProviderController;
 */
 
 Route::get('/', function () {
+    App::setLocale('en');
+//    dd(App::getLocale());
     return view('welcome');
 });
-//Login with Github
-Route::get('provider/{driver}',[SocialProviderController::class,'provider'])
-    ->name('provider');
-Route::get('provider/{driver}/callback',[SocialProviderController::class,'providerHandle']);
 
-Route::get('auth/facebook', [SocialProviderController::class, 'facebookRedirect']);
-Route::get('auth/facebook/callback', [SocialProviderController::class, 'loginWithFacebook']);
+Route::get('/provider/{driver}',
+    [SocialProviderController::class, 'provider'])
+    ->name('provider');
+Route::get('/provider/{driver}/callback',
+    [SocialProviderController::class, 'providerHandle']);
 
 
 Route::middleware(['auth:sanctum', 'verified'])
     ->get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    return view('dashboard');
+})->name('dashboard');
